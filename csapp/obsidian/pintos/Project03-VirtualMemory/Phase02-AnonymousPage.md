@@ -39,7 +39,7 @@ user program tries to access a page which it believes to possess a frame:
 우리는 `lazy_load_segment`, `vm_alloc_page_with_initializer`를 구현해야합니다.
 또한 우리는 전달된 `VM_TYPE`에 맞는 적절한 initializer를 찾아서 가져와야하고 그 ==initializer를 통해서 `uninit_new`를 호출==해야합니다.
 
-## 프레임/페이지 지연 적재를 구현해봅시다
+### 프레임/페이지 지연 적재를 구현해봅시다
 지연 적재(Lazy Loading)란 내가 이해한 바로는 `spt`에만 페이지를 먼저 할당하고 실제 물리 프레임은 실제 필요한 순간(page fault)에만 할당하는 방법인 것 같다.
 또한 프레임을 할당하면 당연히 그 프레임에 데이터를 적재하는 과정도 자연스럽게 따라올 것이다.
 
@@ -197,7 +197,7 @@ vm_try_handle_fault (struct intr_frame *f, void *addr, bool user, bool write, bo
 - Q: `rsp` ~ `USER_STACK`의 주소 범위는 이미 생성된 스택이고 이 범위의 페이지들은 이미 `spt`에 등록이 되어있기 때문에 `rsp - 8` ~ `rsp` 범위만 체크하면 되는 것 아닌가?? 왜 `rsp - 8` ~ `USER_STACK`까지 확인하는 거지??
   A: 완벽히 이해는 안되지만 `rsp`를 한 번에 크게 내리는 경우에는 스택을 높은 주소에서 아래로 차곡차곡 쌓는 방식이 아니라, 스택의 중간 부분들이 비어있는 형태로도 스택 생성이 이뤄질 수도 있다고 한다..
 
-## 프로세스 복제와 삭제 동작을 구현해봅시다.
+### 프로세스 복제와 삭제 동작을 구현해봅시다.
 이제는 프로세스의 복제와 삭제를 지원하기 위해서 supplemental page table interface를 다시 수정해야합니다.
 
 #### `supplemental_page_table_copy`
@@ -226,3 +226,21 @@ vm_try_handle_fault (struct intr_frame *f, void *addr, bool user, bool write, bo
 이 함수는 `process_exit` 함수에 의해서 호출됩니다.
 우리는 `spt`의 `page`들을 순회하면서 각각의 `page`에 대해서 `destroy` 함수를 호출해야합니다.
 이 함수의 호출자가 `pml4`와 `palloc`된 메모리에 대해서는 처리해주기 때문에 이 함수에서는 이 부분들을 신경쓰지 않아도 된다.
+
+### 페이지 삭제를 구현해봅시다.
+이제는 `uninit_destroy`와 `anon_destroy` 두 함수를 구현할 차례입니다.
+물론 uninitialized page는 실행도중 다른 타입의 page로 변환(transmuted)되지만, 프로세스가 종료할 때까지 uninitialized 상태로 남아있는 페이지가 존재할 수도 있습니다.
+
+#### `uninit_destroy` (vm/uninit.c)
+이 함수에서는 `struct page`가 갖고 있던 리소스를 반납해야하며 `page`의 `vm` 타입도 확인해야하고 리소스 반납도 그에 맞게 이루어져야합니다.
+다만 현재는 anonymous pages들만 처리할 수 있습니다.
+file-backed pages에 대해서는 이후에 처리할 예정입니다.
+
+음 좀 이해가 안되는게 코드에 있는 주석을 보니까 그냥 `struct uninit_page`만 반납하면 되는 것 같은데 깃북에 나와있는 설명... 좀 마음에 안드는군...
+
+#### `anon_destroy` (vm/anon.c)
+이 함수에서는 anonymous page가 갖고 있던 리소스를 반납해야합니다.
+이 함수를 호출하는 함수가 `struct page`를 반납해주기 때문에 우리가 명시적으로 `struct page`를 반납할 필요는 없습니다.
+
+여기서도 중요한게 `pml4_destroy`에서 `palloc_free_multiple` 함수로 `frame`을 해제하기 때문에 `anon_destroy` 함수에서는 `struct frame`과 `kva`에 연결된 실제 `frame`을 해제하면 안된다.
+

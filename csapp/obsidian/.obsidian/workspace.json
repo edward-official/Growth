@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "pintos/Project03-VirtualMemory/Phase02-AnonymousPage.md",
+                "file": "pintos/Project03-VirtualMemory/Phase04-MemoryMappedFiles.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Phase02-AnonymousPage"
+              "title": "Phase04-MemoryMappedFiles"
             }
           }
         ]
@@ -143,13 +143,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "pintos/Project03-VirtualMemory/Phase02-AnonymousPage.md",
+                "file": "pintos/Project03-VirtualMemory/Phase04-MemoryMappedFiles.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Phase02-AnonymousPage"
+              "title": "Outline of Phase04-MemoryMappedFiles"
             }
           }
         ],
@@ -173,9 +173,12 @@
   },
   "active": "7c5e6957f7826e5b",
   "lastOpenFiles": [
+    "pintos/Project03-VirtualMemory/images/StackGrowth.png",
+    "pintos/Project03-VirtualMemory/Phase04-MemoryMappedFiles.md",
+    "pintos/Project03-VirtualMemory/Phase03-StackGrowth.md",
+    "pintos/Project03-VirtualMemory/Phase02-AnonymousPage.md",
     "pintos/Project03-VirtualMemory/Phase00-VirtualMemory.md",
     "pintos/Project03-VirtualMemory/Phase01-MemoryManagement.md",
-    "pintos/Project03-VirtualMemory/Phase02-AnonymousPage.md",
     "tmp.png",
     "Screenshot 2025-12-03 at 11.45.15.png",
     "pintos/Project03-VirtualMemory/images/vm_anon_init.png",
@@ -185,7 +188,6 @@
     "pintos/Project03-VirtualMemory/images/Page.png",
     "pintos/Project03-VirtualMemory/images/InsertPage.png",
     "pintos/Project03-VirtualMemory/images/FindElement.png",
-    "pintos/Project03-VirtualMemory/images/OutdatedFind.png",
     "pintos/Project03-VirtualMemory/images",
     "pintos/Project02-UserProgram/other/ExtendFileDescriptor.md",
     "pintos/Project03-VirtualMemory",
@@ -216,8 +218,6 @@
     "CSAPP/Chapter12/Chapter12Unit06-UsingThreadsForParallelism.md",
     "CSAPP/Chapter12/Chapter12Unit05-SynchronizingThreadsWithSemaphores.md",
     "CSAPP/Chapter12/Untitled 1.md",
-    "CSAPP/Chapter12/Untitled.md",
-    "CSAPP/Chapter12/Chapter12Unit04-SharedVariablesInThreadedPrograms.md",
     "Untitled.canvas"
   ]
 }
