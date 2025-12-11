@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="board">
+    <header>
+      <h1>Board</h1>
+    </header>
+    <main>
+      <form id="post-form">
+        <label for="title">Title</label>
+        <input id="title" name="title" placeholder="What is on your mind?" maxlength="80" required>
+
+        <label for="content">Content</label>
+        <textarea id="content" name="content" placeholder="Share a quick note..." required></textarea>
+
+        <button type="submit">Post</button>
+      </form>
+      <section class="posts" id="posts"></section>
+    </main>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
