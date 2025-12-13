@@ -1,3 +1,4 @@
+// 리엑트에서 제공하는 타입들을 가져온다. (컴파일에서만 사용한다.)
 import type { ChangeEvent, FormEvent } from "react";
 
 // 전역 리엑트 객체에서 훅 함수 3개를 가져온다.
@@ -11,14 +12,11 @@ type Post = {
 
 const STORAGE_KEY = "simple-board-posts";
 
+// value is Post: 컴파일러에게 만약 이 함수가 true를 반환할 때만 value를 Post 형태로 간주하라고 선언하는 것.
 const isPost = (value: unknown): value is Post => {
   if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<Post>;
-  return (
-    typeof candidate.title === "string" &&
-    typeof candidate.content === "string" &&
-    typeof candidate.createdAt === "string"
-  );
+  const candidate = value as Partial<Post>; // 컴파일러에게 value가 Post 모양일 수도 있다고 가정하고 프로퍼티 접근을 허용해달라고 요청하는 것.
+  return (typeof candidate.title === "string" && typeof candidate.content === "string" && typeof candidate.createdAt === "string");
 };
 
 const loadPosts = (): Post[] => {
@@ -94,30 +92,10 @@ function Board(): JSX.Element {
       <main>
         <form onSubmit={handleSubmit}>
           <label htmlFor="title">Title</label>
-          <input
-            ref={titleInputRef}
-            id="title"
-            name="title"
-            placeholder="What is on your mind?"
-            maxLength={80}
-            required
-            value={title}
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setTitle(event.target.value)
-            }
-          />
+          <input ref={titleInputRef} id="title" name="title" placeholder="What is on your mind?" maxLength={80} required value={title} onChange={(event: ChangeEvent<HTMLInputElement>) => setTitle(event.target.value)}/>
 
           <label htmlFor="content">Content</label>
-          <textarea
-            id="content"
-            name="content"
-            placeholder="Share a quick note..."
-            required
-            value={content}
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-              setContent(event.target.value)
-            }
-          />
+          <textarea id="content" name="content" placeholder="Share a quick note..." required value={content} onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setContent(event.target.value)}/>
 
           <button type="submit">Post</button>
         </form>
@@ -131,14 +109,7 @@ function Board(): JSX.Element {
                 <h3>{post.title || "Untitled"}</h3>
                 <time>{new Date(post.createdAt).toLocaleString()}</time>
                 <p>{post.content}</p>
-
-                <button
-                  type="button"
-                  className="delete"
-                  onClick={() => handleDelete(index)}
-                >
-                  Delete
-                </button>
+                <button type="button" className="delete" onClick={() => handleDelete(index)}>Delete</button>
               </article>
             ))
           )}
