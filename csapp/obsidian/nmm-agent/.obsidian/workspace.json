@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Domination/Code/BE01-mainpy.md",
+                "file": "Domination/Node.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "BE01-mainpy"
+              "title": "Node"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Domination/Code/BE01-mainpy.md",
+                "file": "Domination/Node.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for BE01-mainpy"
+              "title": "Backlinks for Node"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Domination/Code/BE01-mainpy.md",
+                "file": "Domination/Node.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from BE01-mainpy"
+              "title": "Outgoing links from Node"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Domination/Code/BE01-mainpy.md",
+                "file": "Domination/Node.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of BE01-mainpy"
+              "title": "Outline of Node"
             }
           }
         ],
@@ -185,18 +185,25 @@
   },
   "active": "558a7f2a871467e2",
   "lastOpenFiles": [
+    "Collection/Presentation.md",
+    "Domination/Node.md",
+    "Untitled",
+    "Collection/Node.md",
+    "Domination",
+    "Collection/JDC.md",
+    "Domination/TopologySort.md",
+    "Domination/WorkFlowValidation.md",
+    "StudyLog-20251222.md",
     "Domination/Document/BE01-Structure.md",
     "Domination/Code/BE01-mainpy.md",
     "Domination/Document",
     "Domination/Code",
-    "Collection/JDC.md",
     "Domination",
     "StudyLog-20251220.md",
     "StudyLog-20251219.md",
     "Collection/Told.md",
     "Collection/Roadmap.md",
     "Collection/ProjectProposal.md",
-    "Collection/Node.md",
     "Collection/Challenging.md",
     "Collection"
   ]
