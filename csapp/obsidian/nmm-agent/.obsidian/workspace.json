@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "StudyLog-20251226.md",
+                "file": "Moduly/CreateAppModal-P02.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "StudyLog-20251226"
+              "title": "CreateAppModal-P02"
             }
           }
         ],
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "StudyLog-20251226.md",
+                "file": "Moduly/CreateAppModal-P02.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of StudyLog-20251226"
+              "title": "Outline of CreateAppModal-P02"
             }
           }
         ],
@@ -200,11 +200,13 @@
   },
   "active": "0e5a86ab725d7220",
   "lastOpenFiles": [
-    "Domination/WorkFlow.md",
+    "StudyLog-20251219.md",
+    "Moduly/CreateAppModal-P01.md",
+    "Moduly/CreateAppModal-P02.md",
     "StudyLog-20251226.md",
+    "Domination/WorkFlow.md",
     "Untitled",
     "Domination/NodeVersion3.md",
-    "Moduly/CreateAppModal.md",
     "Moduly",
     "StudyLog-20251224.md",
     "Domination/FunctionalRequirement.md",
@@ -223,13 +225,11 @@
     "Communication/C01-ProjectPlanning.md",
     "Communication",
     "Collection/Untitled.md",
-    "StudyLog-20251219.md",
     "Domination",
     "Domination/TopologySort.md",
     "Domination/WorkFlowValidation.md",
     "StudyLog-20251222.md",
     "Domination/Document/BE01-Structure.md",
-    "Domination/Code/BE01-mainpy.md",
     "Domination/Document",
     "Domination/Code",
     "Domination",
