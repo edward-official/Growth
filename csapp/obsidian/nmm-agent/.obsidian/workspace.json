@@ -8,35 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "558a7f2a871467e2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Domination/WorkFlow.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "WorkFlow"
-            }
-          },
-          {
             "id": "0e5a86ab725d7220",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Moduly/KAN-163/AnswerNode.md",
+                "file": "StudyLog-20251230.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "AnswerNode"
+              "title": "StudyLog-20251230"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -171,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Moduly/KAN-163/AnswerNode.md",
+                "file": "StudyLog-20251230.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of AnswerNode"
+              "title": "Outline of StudyLog-20251230"
             }
           }
         ],
@@ -200,8 +185,14 @@
   },
   "active": "0e5a86ab725d7220",
   "lastOpenFiles": [
-    "Moduly/KAN-159/CreateAppModal-P07.md",
+    "Moduly/KAN-164/ConditionNode-P02.md",
+    "StudyLog-20251230.md",
+    "Moduly/KAN-164/ConditionNode-P01.md",
+    "Moduly/KAN-163/FurtherImprovement.md",
+    "Domination/WorkFlow.md",
     "Moduly/KAN-163/AnswerNode.md",
+    "Moduly/KAN-164",
+    "Moduly/KAN-159/CreateAppModal-P07.md",
     "Moduly/KAN-163",
     "Moduly/KAN-159/CreateAppModal-P06.md",
     "Moduly/KAN-159",
@@ -209,7 +200,6 @@
     "Moduly/KAN-159/CreateAppModal-P04.md",
     "Moduly/KAN-159/CreateAppModal-P03.md",
     "Untitled",
-    "Domination/WorkFlow.md",
     "StudyLog-20251226.md",
     "Moduly/KAN-159/CreateAppModal-P01.md",
     "Moduly/KAN-159/CreateAppModal-P02.md",
@@ -226,15 +216,10 @@
     "Collection/JDC.md",
     "Collection/CoffeeChat-20251223.md",
     "Collection/Challenging.md",
-    "StudyLog-20251220.md",
-    "Domination/NodeVersion2.md",
-    "Domination/NodeVersion1.md",
-    "Communication/C02-Features.md",
     "Communication",
     "Domination",
     "Domination/Document",
     "Domination/Code",
-    "Domination",
-    "Collection"
+    "Domination"
   ]
 }
