@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "StudyLog-20251230.md",
+                "file": "Moduly/KAN-236/SchemaDesign.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "StudyLog-20251230"
+              "title": "SchemaDesign"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "StudyLog-20251230.md",
+                "file": "Moduly/KAN-236/SchemaDesign.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of StudyLog-20251230"
+              "title": "Outline of SchemaDesign"
             }
           }
         ],
@@ -185,8 +185,10 @@
   },
   "active": "0e5a86ab725d7220",
   "lastOpenFiles": [
-    "Moduly/KAN-164/ConditionNode-P02.md",
     "StudyLog-20251230.md",
+    "Moduly/KAN-236/SchemaDesign.md",
+    "Moduly/KAN-236",
+    "Moduly/KAN-164/ConditionNode-P02.md",
     "Moduly/KAN-164/ConditionNode-P01.md",
     "Moduly/KAN-163/FurtherImprovement.md",
     "Domination/WorkFlow.md",
@@ -215,11 +217,9 @@
     "Collection/Node.md",
     "Collection/JDC.md",
     "Collection/CoffeeChat-20251223.md",
-    "Collection/Challenging.md",
     "Communication",
     "Domination",
     "Domination/Document",
-    "Domination/Code",
-    "Domination"
+    "Domination/Code"
   ]
 }
