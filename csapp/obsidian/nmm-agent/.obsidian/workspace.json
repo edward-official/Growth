@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "StudyLog-20260120.md",
+                "file": "StudyLog-20260121.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "StudyLog-20260120"
+              "title": "StudyLog-20260121"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "StudyLog-20260120.md",
+                "file": "StudyLog-20260121.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of StudyLog-20260120"
+              "title": "Outline of StudyLog-20260121"
             }
           }
         ],
@@ -185,8 +185,9 @@
   },
   "active": "0e5a86ab725d7220",
   "lastOpenFiles": [
-    "LoadTest/Version02.md",
     "StudyLog-20260120.md",
+    "StudyLog-20260121.md",
+    "LoadTest/Version02.md",
     "LoadTest/Version02-Analysis.md",
     "LoadTest/Version01.md",
     "LoadTest",
@@ -216,7 +217,6 @@
     "Moduly",
     "StudyLog-20251224.md",
     "Domination/FunctionalRequirement.md",
-    "Collection/Roadmap.md",
     "Communication",
     "Domination",
     "Domination/Document",
