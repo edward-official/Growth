@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "092f3a9b90d2966f",
+        "id": "a6715024d65aabce",
         "type": "tabs",
         "children": [
           {
-            "id": "5ee9384f4b5c6783",
+            "id": "425b6c8de16c2364",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -183,7 +183,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "5ee9384f4b5c6783",
+  "active": "425b6c8de16c2364",
   "lastOpenFiles": [
     "StudyLog-20260123.md",
     "StudyLog-20260122.md",
