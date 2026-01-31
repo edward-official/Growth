@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "StudyLog-20260124.md",
+                "file": "StudyLog-20260131.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "StudyLog-20260124"
+              "title": "StudyLog-20260131"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "StudyLog-20260124.md",
+                "file": "StudyLog-20260131.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of StudyLog-20260124"
+              "title": "Outline of StudyLog-20260131"
             }
           }
         ],
@@ -185,19 +185,20 @@
   },
   "active": "425b6c8de16c2364",
   "lastOpenFiles": [
-    "StudyLog-20260123.md",
     "StudyLog-20260124.md",
+    "StudyLog-20260131.md",
+    "StudyLog-20260123.md",
     "StudyLog-20260122.md",
     "StudyLog-20260121.md",
     "StudyLog-20260120.md",
+    "StudyLog-20260113.md",
+    "StudyLog-20251230.md",
     "LoadTest/Version02.md",
     "LoadTest/Version02-Analysis.md",
     "LoadTest/Version01.md",
     "LoadTest",
-    "StudyLog-20260113.md",
     "Moduly/KAN-236/SchemaDesign-P02.md",
     "Moduly/KAN-236/SchemaDesign-P01.md",
-    "StudyLog-20251230.md",
     "Moduly/KAN-236",
     "Moduly/KAN-164/ConditionNode-P02.md",
     "Moduly/KAN-164/ConditionNode-P01.md",
@@ -215,7 +216,6 @@
     "StudyLog-20251226.md",
     "Moduly/KAN-159/CreateAppModal-P01.md",
     "Moduly/KAN-159/CreateAppModal-P02.md",
-    "StudyLog-20251219.md",
     "Moduly",
     "Communication",
     "Domination",
