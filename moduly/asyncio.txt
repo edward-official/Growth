@@ -1,0 +1,11 @@
+coroutine이 뭐지??
+- 일단 coroutine은 os thread를 블락하지 않고 suspend/resume할 수 있는 실행단위이다.
+- 그리고 coroutine은 하나의 os thread 내부에서 실행됩니다.
+- os는 coroutine의 존재에 대해서 전혀 모르고 런타임(언어/프레임워크)가 coroutine들의 scheduling을 담당합니다.
+- 또 coroutine은 non-preemptive이지만 cooperative, voluntary하다. (await을 통해서 explicit하게 yield를 해야한다.)
+
+event loop는 뭐지??
+- 이 coroutine들을 schedule하는게 바로 event loop이다.
+- does a single event loop run inside a single os thread?
+- how is nested event loop problematic?
+- from what I understood, a single os thread can have multiple event loop inside it. is my assumption correct?
