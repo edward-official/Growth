@@ -1,11 +1,33 @@
-coroutine이 뭐지??
-- 일단 coroutine은 os thread를 블락하지 않고 suspend/resume할 수 있는 실행단위이다.
-- 그리고 coroutine은 하나의 os thread 내부에서 실행됩니다.
-- os는 coroutine의 존재에 대해서 전혀 모르고 런타임(언어/프레임워크)가 coroutine들의 scheduling을 담당합니다.
-- 또 coroutine은 non-preemptive이지만 cooperative, voluntary하다. (await을 통해서 explicit하게 yield를 해야한다.)
+What is a coroutine in asyncio python?
+- In asyncio, a coroutine is a special function that can pause and resume execution, allowing non-blocking concurrency within a single thread.
+- non-preemptive, cooperative, voluntary (have to explciitly yield through 'await' keyword)
 
-event loop는 뭐지??
-- 이 coroutine들을 schedule하는게 바로 event loop이다.
-- does a single event loop run inside a single os thread?
-- how is nested event loop problematic?
-- from what I understood, a single os thread can have multiple event loop inside it. is my assumption correct?
+What does "allowing non-blocking" mean? Is it about blocking os thread?
+- Yes, “non-blocking” means not blocking the OS thread.
+- More precisely, it means not blocking the event loop thread that is running your coroutines.
+
+What do you mean by "event loop thread"? Is an event loop a thread?
+- Short answer: no, an event loop is not a thread.
+- An event loop runs inside a thread, usually one OS thread.
+
+Then what is an event loop?
+- Short answer: No, an event loop is not a thread.
+- It is code that runs inside a thread.
+
+How does 'await' work? Future? Callback? Interrupt?
+- 'await' is not an interrupt and not a callback.
+- It is a controlled suspension of a coroutine that waits on a Future.
+
+What is a 'Future'? Is it a python instance?
+- Yes. A Future is a concrete Python object (an instance).
+- A Future is a Python object that represents a result that will be available later.
+
+How is nested event loop problematic?
+- A nested event loop means trying to start or run an event loop while another event loop is already running in the same thread.
+- In 'asyncio', this is fundamentally problematic by design.
+- A thread may have at most one running event loop at a time
+- The event loop owns the thread
+- It assumes full control over scheduling
+- There is no re-entrant scheduling model
+
+How can nested event loop make deadlock?
