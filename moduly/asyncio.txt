@@ -22,7 +22,12 @@ What is a 'Future'? Is it a python instance?
 - Yes. A Future is a concrete Python object (an instance).
 - A Future is a Python object that represents a result that will be available later.
 
-How is nested event loop problematic?
+Does 'Future' have something to do with the 'await' keyword?
+- Yes directly, but they are not the same thing.
+- Future represents a value that will be available later.
+- 'await' is syntax that pauses execution until that Future completes.
+
+🚨 How is nested event loop problematic?
 - A nested event loop means trying to start or run an event loop while another event loop is already running in the same thread.
 - In 'asyncio', this is fundamentally problematic by design.
 - A thread may have at most one running event loop at a time
@@ -30,4 +35,16 @@ How is nested event loop problematic?
 - It assumes full control over scheduling
 - There is no re-entrant scheduling model
 
-How can nested event loop make deadlock?
+What does 're-entrant' mean in os?
+- Re-entrant code can be interrupted and called again (“re-entered”) before the first execution finishes, and both executions run correctly.
+
+🚨 How can nested loops break Future ownership?
+- Each event loop "owns" its thread — it assumes exclusive control over scheduling
+- When you create a nested loop, you have two event loops competing for control in the same thread
+- Futures are bound to specific event loops — a Future created in one loop belongs to that loop
+- The inner loop doesn't know about Futures from the outer loop and vice versa
+- Scheduling conflicts arise — which loop should handle which Future's completion?
+
+🚨 How can nested event loop make deadlock?
+- A nested event loop deadlocks when a coroutine blocks the only thread that could make the awaited Future complete.
+- The event loop that must complete the Future is blocked by the code waiting for that Future.
