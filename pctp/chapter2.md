@@ -447,3 +447,242 @@ data[a * width + b]
 
 특별한 성능 최적화 목적이 아니라면, 주어진 2차원 구조를 그대로 사용하는 것이 일반적으로 가장 바람직하다.
 
+---
+
+## [문제 바로가기](https://programmers.co.kr/learn/courses/30/lessons/87377)
+
+이 문제는 크게 다섯 단계로 나눌 수 있습니다.
+
+1. 모든 직선 쌍의 교점을 구한다.
+2. 그중에서 정수 좌표인 교점만 저장한다.
+3. 모든 교점을 포함하는 최소 사각형의 범위를 구한다.
+4. 2차원 배열을 생성한 뒤 교점 위치에 `*`을 찍는다.
+5. 최종 결과를 문제에서 요구하는 형태로 반환한다.
+
+이 과정을 차례대로 살펴보겠습니다.
+
+
+### 1. 모든 교점 구하기
+
+두 직선
+
+```
+Ax + By + E = 0  
+Cx + Dy + F = 0
+```
+
+의 교점은 다음 공식으로 구할 수 있습니다.
+
+```
+x = (BF - ED) / (AD - BC)  
+y = (EC - AF) / (AD - BC)
+```
+
+단, `AD - BC = 0`이면 두 직선은 평행하거나 일치하므로 교점이 존재하지 않습니다.
+
+이를 코드로 구현하면 다음과 같습니다.
+
+```python
+for i in range(len(line)):
+    a, b, e = line[i]
+    for j in range(i + 1, len(line)):
+        c, d, f = line[j]
+
+        if a * d == b * c:
+            continue
+
+        x = (b * f - e * d) / (a * d - b * c)
+        y = (e * c - a * f) / (a * d - b * c)
+```
+
+이중 반복문이므로 시간 복잡도는 O(n²)입니다.
+하지만 직선의 개수가 최대 1000개이므로 충분히 허용 범위 내에 있습니다.
+
+
+### 2. 정수 교점만 저장하기
+
+문제에서 요구하는 것은 정수 좌표에만 별을 찍는 것입니다.
+따라서 교점이 정수인지 확인해야 합니다.
+
+#### 방법 1: 정수 변환 비교 방식
+
+```python
+if x == int(x) and y == int(y):
+    x = int(x)
+    y = int(y)
+    pos.append((x, y))
+```
+
+#### 방법 2: `is_integer()` 활용 방식
+
+```python
+if x.is_integer() and y.is_integer():
+    x = int(x)
+    y = int(y)
+    meet.append((x, y))
+```
+
+두 방식 모두 사용 가능합니다.
+이와 동시에 최소/최대 좌표도 갱신해 줍니다.
+
+```python
+x_min = min(x_min, x)
+x_max = max(x_max, x)
+y_min = min(y_min, y)
+y_max = max(y_max, y)
+```
+
+
+### 3. 최소 사각형 범위 계산
+
+모든 정수 교점을 포함하는 최소 사각형의 크기는 다음과 같이 계산됩니다.
+
+```
+width  = x_max - x_min + 1  
+height = y_max - y_min + 1
+```
+
+이제 이 크기만큼의 2차원 배열을 생성합니다.
+
+주의할 점은 얕은 복사입니다.
+
+잘못된 방식:
+
+```python
+board = [['.'] * width] * height
+```
+
+올바른 방식:
+
+```python
+board = [['.'] * width for _ in range(height)]
+```
+
+
+### 4. 좌표를 배열 인덱스로 변환하여 별 찍기
+
+좌표는 음수를 가질 수 있지만 배열 인덱스는 0부터 시작합니다.
+따라서 보정이 필요합니다.
+
+```
+nx = x - x_min  
+ny = y - y_min
+```
+
+또는 y축 방향을 바로 맞추는 방식도 가능합니다.
+
+```
+ny = y_max - y  
+nx = x - x_min
+```
+
+
+## 전체 코드 1: 배열을 뒤집는 방식
+
+이 방식은 먼저 별을 모두 찍고, 마지막에 배열을 뒤집어 반환합니다.
+
+```python
+def solution(line):
+    pos = []
+    n = len(line)
+
+    x_min = y_min = int(1e15)
+    x_max = y_max = -int(1e15)
+
+    # 1. 교점 구하기
+    for i in range(n):
+        a, b, e = line[i]
+        for j in range(i + 1, n):
+            c, d, f = line[j]
+
+            if a * d == b * c:
+                continue
+
+            x = (b * f - e * d) / (a * d - b * c)
+            y = (e * c - a * f) / (a * d - b * c)
+
+            # 2. 정수 교점만 저장
+            if x == int(x) and y == int(y):
+                x = int(x)
+                y = int(y)
+                pos.append((x, y))
+
+                x_min = min(x_min, x)
+                x_max = max(x_max, x)
+                y_min = min(y_min, y)
+                y_max = max(y_max, y)
+
+    # 3. 최소 사각형 크기
+    width = x_max - x_min + 1
+    height = y_max - y_min + 1
+
+    # 4. 배열 생성
+    board = [['.'] * width for _ in range(height)]
+
+    # 5. 별 찍기
+    for x, y in pos:
+        nx = x - x_min
+        ny = y - y_min
+        board[ny][nx] = '*'
+
+    # 6. 뒤집기
+    return [''.join(row) for row in board[::-1]]
+```
+
+
+## 전체 코드 2: 정렬을 이용해 뒤집기 없이 처리
+
+이 방식은 y좌표 기준으로 정렬하여 처음부터 위에서 아래 순서로 별을 찍습니다.
+
+```python
+def solution(line):
+    meet = []
+    x_min = y_min = float('inf')
+    x_max = y_max = -float('inf')
+
+    # 1. 교점 구하기
+    for i in range(len(line)):
+        a, b, e = line[i]
+        for j in range(i + 1, len(line)):
+            c, d, f = line[j]
+
+            if (a * d - b * c) == 0:
+                continue
+
+            x = (b * f - e * d) / (a * d - b * c)
+            y = (e * c - a * f) / (a * d - b * c)
+
+            # 2. 정수 교점만 저장
+            if x.is_integer() and y.is_integer():
+                x = int(x)
+                y = int(y)
+                meet.append((x, y))
+
+                x_min = min(x_min, x)
+                x_max = max(x_max, x)
+                y_min = min(y_min, y)
+                y_max = max(y_max, y)
+
+    # 3. 최소 사각형 크기
+    width = x_max - x_min + 1
+    height = y_max - y_min + 1
+    answer = [['.'] * width for _ in range(height)]
+
+    # 4. y 기준 내림차순 정렬
+    meet.sort(key=lambda p: -p[1])
+
+    for x, y in meet:
+        ny = y_max - y
+        nx = x - x_min
+        answer[ny][nx] = '*'
+
+    return list(map(''.join, answer))
+```
+
+
+### 두 방식의 차이
+
+* 첫 번째 방식은 구현이 직관적이며, 마지막에 배열을 뒤집는 구조입니다.
+* 두 번째 방식은 정렬을 통해 처음부터 올바른 방향으로 출력되도록 구성한 방식입니다.
+
+결과는 동일하지만, 사고 흐름과 구현 방식에서 차이가 있습니다.
