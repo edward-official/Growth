@@ -20,8 +20,21 @@
               "icon": "lucide-file",
               "title": "StudyLog-20260131"
             }
+          },
+          {
+            "id": "04ab79bbfb60630d",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.11.7"
+              },
+              "icon": "lucide-book-up",
+              "title": "Release Notes 1.11.7"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -156,13 +169,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "StudyLog-20260131.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of StudyLog-20260131"
+              "title": "Outline"
             }
           }
         ],
@@ -183,7 +195,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "425b6c8de16c2364",
+  "active": "04ab79bbfb60630d",
   "lastOpenFiles": [
     "StudyLog-20260124.md",
     "StudyLog-20260131.md",
