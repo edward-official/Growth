@@ -90,6 +90,88 @@ def solution(s):
 - **자료형의 이해:** 문자열을 리스트로 바꾸어 수정하고 다시 합치는 과정은 코딩 테스트에서 빈번하게 사용되는 패턴입니다.
 - **상태 관리:** `cnt` 변수처럼 특정 조건(공백)에 따라 상태를 초기화하는 로직은 복잡한 문자열 처리 문제를 풀 때 유용합니다.
 
-```
+---
+
+## [문제 8 바로가기](https://school.programmers.co.kr/learn/courses/30/lessons/64065)
+
+### 1. 기본 코드 (리스트 사용, $O(N^2)$ 가능성)
+
+가장 먼저 떠올릴 수 있는 정석적인 접근법입니다. 하지만 중복 검사 시 리스트를 순회하기 때문에 데이터가 많을 경우 속도가 느려집니다.
+
+```python
+def solution(s):
+    # 전처리: 양 끝의 {{ }} 제거 후 '},{'로 분리
+    data = s[2:-2].split("},{")
+
+    # 각 집합의 길이에 따라 오름차순 정렬
+    data.sort(key=len)
+
+    answer = []
+    for row in data:
+        items = row.split(',')
+        for item in items:
+            number = int(item)
+            # 리스트에서 in 연산은 O(n)이 소요되어 전체적으로 느려짐
+            if number not in answer:
+                answer.append(number)
+
+    return answer
 
 ```
+
+### 2. 성능 최적화 코드 (딕셔너리 사용, $O(N \log N)$)
+
+교재에서 성능을 10배 이상 개선한 방식입니다. 딕셔너리를 사용해 중복 검사 시간을 $O(1)$로 단축했습니다.
+
+```python
+def solution(s):
+    # 중복 체크를 위한 딕셔너리 (Hash Table)
+    answer_dict = {}
+
+    # 전처리와 정렬을 한 줄로 처리
+    s = sorted(s[2:-2].split("},{"), key=len)
+
+    for group in s:
+        elements = group.split(',')
+        for element in elements:
+            number = int(element)
+            # 딕셔너리 키 조회를 통해 O(1)로 중복 확인
+            if number not in answer_dict:
+                answer_dict[number] = 1
+
+    # 딕셔너리의 키들을 리스트로 변환하여 반환
+    return list(answer_dict)
+
+```
+
+### 3. 빈도수 기반 최적화 코드 (Counter 사용)
+
+교재 마지막 "잠깐만요" 섹션에서 언급된 팁입니다. 튜플의 특성상 앞쪽 원소일수록 모든 집합에 더 많이 등장한다는 점을 이용합니다.
+
+```python
+import re
+from collections import Counter
+
+def solution(s):
+    # 정규 표현식으로 숫자만 모두 뽑아냄
+    numbers = re.findall(r'\d+', s)
+
+    # 각 숫자가 등장한 횟수를 카운트
+    # 가장 많이 등장한 숫자부터 정렬하면 그것이 곧 튜플의 순서
+    count = Counter(numbers)
+
+    # 등장 빈도가 높은 순서대로 리스트 생성
+    return [int(k) for k, v in count.most_common()]
+
+```
+
+### 성능 및 특징 비교
+
+| 구분               | 리스트 사용 (1번)         | 딕셔너리 사용 (2번)               | 빈도수 사용 (3번)         |
+| ------------------ | ------------------------- | --------------------------------- | ------------------------- |
+| **주요 로직**      | 길이순 정렬 + 리스트 검색 | 길이순 정렬 + 해시 검색           | 숫자 빈도수 카운트        |
+| **중복 검사 시간** | $O(N)$                    | **$O(1)$**                        | (검사 불필요)             |
+| **전체 복잡도**    | $O(N^2)$ (준하는 수준)    | **$O(N \log N)$**                 | **$O(N)$**                |
+| **장점**           | 직관적이고 이해하기 쉬움  | **교재에서 권장하는 정석 최적화** | 코드가 매우 간결하고 빠름 |
+
+이 문제의 핵심은 **"문자열이라는 데이터를 어떻게 요리하기 좋은 형태로 바꾸느냐"**와 **"반복되는 검색을 어떻게 줄이느냐"**에 있었습니다.
