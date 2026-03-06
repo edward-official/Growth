@@ -175,3 +175,153 @@ def solution(s):
 | **장점**           | 직관적이고 이해하기 쉬움  | **교재에서 권장하는 정석 최적화** | 코드가 매우 간결하고 빠름 |
 
 이 문제의 핵심은 **"문자열이라는 데이터를 어떻게 요리하기 좋은 형태로 바꾸느냐"**와 **"반복되는 검색을 어떻게 줄이느냐"**에 있었습니다.
+
+---
+
+## [문제 9 바로가기](https://programmers.co.kr/learn/courses/30/lessons/12973)
+
+### 1. 초기 접근 코드 (시간 초과 발생)
+
+이 코드는 문제에 제시된 과정을 그대로 구현한 방식입니다. 문자열을 리스트로 변환하고, 루프를 돌며 인접한 쌍을 찾아 공백으로 바꾼 뒤 다시 합치는 과정을 반복합니다.
+
+```python
+def solution(s):
+    while len(s) > 1:             # 문자열이 남을 때까지
+        s = list(s)               # 문자열을 문자 배열로 전환
+        for i in range(len(s) - 1): # 배열 인덱스는 항상 신경 쓸 것
+            if s[i] == s[i + 1]: s[i] = s[i + 1] = "" # 중복 문자를 공백으로 변경
+
+        new_s = "".join(s)        # 문자열을 합치면서 공백 자동 제거
+        if len(s) == len(new_s): break # 변화가 없으면 제거하지 못했으므로 반복문 탈출
+        s = new_s
+
+    return 1 if len(s) == 0 else 0
+```
+
+### 2. 최적화 코드 (스택 활용 - 정답)
+
+문자열을 한 번만 읽으면서($O(N)$) 스택 자료구조를 사용하여 효율성을 극대화한 코드입니다.
+
+```python
+def solution(s):
+    stack = []
+    for case in s:
+        if stack and stack[-1] == case:
+            stack.pop() # 스택에 값이 있고 마지막이 같으면 제거
+        else:
+            stack.append(case)
+
+    return 1 if not stack else 0
+```
+
+### 코드 비교 요약
+
+| 구분            | 초기 코드 (While/For)                 | 최적화 코드 (Stack)                    |
+| --------------- | ------------------------------------- | -------------------------------------- |
+| **핵심 논리**   | 전체를 반복해서 훑으며 제거 후 재결합 | 스택에 쌓으며 즉시 짝을 확인하여 제거  |
+| **시간 복잡도** | 최악의 경우 $O(N^2)$ (효율성 실패)    | $O(N)$ (효율성 통과)                   |
+| **주요 특징**   | 문자열 합치기(`join`) 연산이 반복됨   | 단 한 번의 순회로 종료되어 매우 간결함 |
+
+---
+
+## [문제 10 바로가기](https://programmers.co.kr/learn/courses/30/lessons/60057)
+
+### 1. 문제 풀이 전략
+
+카카오 2020 블라인드 테스트에 출제된 이 문제는 지문이 길지만, 요구사항을 정확히 분석하면 충분히 해결 가능합니다. 핵심은 **'전체 탐색'**입니다.
+
+#### 문제 풀이 흐름
+
+1. **압축 단위 설정**: 압축은 동일한 단어가 연속될 때만 가능하므로, 압축 가능한 최대 단위 길이는 원래 문자열 길이의 $\frac{1}{2}$입니다.
+2. **반복 횟수 관리**: 해당 규칙이 몇 번 반복되었는지 관리하는 변수를 두고, 2번 이상 반복될 때만 숫자를 붙여 길이에 반영합니다.
+3. **탐색 범위 조정**: 현재 위치의 단어와 그다음 위치의 단어를 비교하며 진행하되, 남은 문자열이 설정한 압축 단위보다 짧으면 더 이상 압축이 불가능하므로 탐색을 중단하거나 남은 부분을 처리합니다.
+4. **최솟값 비교**: 각 단위별로 압축을 수행한 결과 중 가장 짧은 길이를 선택합니다.
+
+> **Tip**: 실제로 문자열을 합칠 필요는 없습니다. 길이만 구하면 되므로 변수를 활용해 계산된 길이값만 합산하는 것이 효율적입니다.
+
+### 2. 주요 코드 작성 포인트
+
+#### 첫 번째 방법: 순차 비교 방식
+
+문자열을 앞에서부터 정해진 단위 `x`만큼 잘라가며 바로 뒷부분과 비교하는 방식입니다.
+
+```python
+# 순차 비교 핵심 로직
+answer = len(s)
+for x in range(1, len(s) // 2 + 1):
+    comp_len = 0
+    comp = ""
+    cnt = 1
+    for i in range(0, len(s) + 1, x):
+        temp = s[i:i + x]
+        if comp == temp:
+            cnt += 1
+        else:
+            comp_len += len(temp)
+            if cnt > 1:
+                comp_len += len(str(cnt))
+            cnt = 1
+            comp = temp
+    answer = min(answer, comp_len)
+```
+
+#### 두 번째 방법: 패턴 생성 후 비교 방식
+
+모든 단위 규칙을 미리 리스트로 만들어 두고, `zip()` 함수 등을 활용해 규칙끼리 전수 조사하는 방식입니다.
+
+```python
+# 패턴 생성 방식 (compress 함수)
+def compress(s, length):
+    words = [s[i:i+length] for i in range(0, len(s), length)]
+    res = []
+    cur_word = words[0]
+    cur_cnt = 1
+
+    # zip을 활용해 현재 단어와 다음 단어를 비교
+    for pattern, compare in zip(words, words[1:] + [""]):
+        if pattern == compare:
+            cur_cnt += 1
+        else:
+            res.append((cur_word, cur_cnt))
+            cur_word = compare
+            cur_cnt = 1
+
+    # 최종 길이 계산
+    return sum(len(word) + (len(str(cnt)) if cnt > 1 else 0) for word, cnt in res)
+```
+
+### 3. 전체 코드 (최종본)
+
+두 번째 방식인 패턴 생성법을 적용한 전체 코드입니다. 문자열 길이가 1인 경우의 예외 처리가 포함되어 있습니다.
+
+```python
+def compress(s, length):
+    words = [s[i:i+length] for i in range(0, len(s), length)]
+    res = []
+    cur_word = words[0]
+    cur_cnt = 1
+
+    for pattern, compare in zip(words, words[1:] + [""]):
+        if pattern == compare:
+            cur_cnt += 1
+        else:
+            res.append([cur_word, cur_cnt])
+            cur_word = compare
+            cur_cnt = 1
+
+    return sum(len(word) + (len(str(cnt)) if cnt > 1 else 0) for word, cnt in res)
+
+def solution(s):
+    # 문자열 길이가 1인 경우 예외 처리
+    if len(s) == 1:
+        return 1
+
+    # 1부터 n/2까지 모든 단위로 압축 시도
+    return min(compress(s, length) for length in range(1, len(s) // 2 + 1))
+```
+
+### 마무리 요약
+
+- **전체 탐색**: 가능한 모든 단위($1 \sim \frac{len(s)}{2}$)를 시도해 보는 것이 핵심입니다.
+- **예외 처리**: 입력 문자열의 길이가 1일 때 반복문이 실행되지 않을 수 있으므로 반드시 고려해야 합니다.
+- **비교 방식**: 순차적으로 자르며 비교하거나, 미리 리스트를 만들어 `zip`으로 비교하는 방식 중 자신에게 편한 방법을 선택하면 됩니다.
