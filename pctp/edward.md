@@ -2,8 +2,6 @@
 
 이 파일은 파이썬에 대해서 공부한 내용과 그 공부 과정을 기록하는 공간입니다.
 
----
-
 ## 딕셔너리 (Dictionary)
 
 파이썬의 **딕셔너리(Dictionary)**는 키(Key)와 값(Value)이 한 쌍으로 이루어진 자료형입니다. 중괄호 `{}`를 사용하며, 데이터를 효율적으로 찾고 관리할 때 매우 유용합니다.
@@ -60,8 +58,6 @@ for key, value in user.items():
     print(f"{key}: {value}")
 ```
 
----
-
 ## 데이터 정렬 (Sorting)
 
 파이썬에서 데이터를 정렬할 때는 주로 내장 함수인 **`sorted()`**와 리스트의 메서드인 **`.sort()`**를 사용합니다. 두 방식은 비슷해 보이지만 명확한 차이점이 있습니다.
@@ -86,26 +82,58 @@ nums.sort()
 # nums: [1, 2, 3, 4]
 ```
 
-### 2. 주요 매개변수 (Parameters)
+### 2. `sorted()` 함수의 상세 구조와 인자 순서
 
-두 함수 모두 동일한 옵션을 제공하여 정렬 방식을 세밀하게 조정할 수 있습니다.
+`sorted()` 함수는 최대 3개의 인자를 받을 수 있으며, 그 순서와 역할은 다음과 같습니다.
 
-#### reverse (내림차순 정렬)
+```python
+sorted(iterable, key=None, reverse=False)
+```
+
+1.  **iterable (필수):** 리스트, 튜플, 문자열 등 정렬하고 싶은 **반복 가능한 객체**입니다. 첫 번째 자리에 위치해야 합니다.
+2.  **key (선택):** 정렬의 기준이 되는 **함수**를 전달합니다. (기본값: `None`)
+3.  **reverse (선택):** **내림차순** 여부를 결정하는 불리언 값입니다. (기본값: `False`)
+
+> **[Tip] 인자 순서에 대하여**
+> `iterable`은 위치 인자(Positional Argument)이므로 반드시 첫 번째로 와야 하지만, `key`와 `reverse`는 키워드 인자(Keyword Argument)이므로 이름을 명시한다면 순서가 바뀌어도 동작합니다. 하지만 가독성을 위해 위 순서를 지키는 것이 관습입니다.
+>
+> ```python
+> # 올바른 예시
+> sorted(nums, key=len, reverse=True)
+> # 순서가 바뀌어도 동작은 하지만 가독성이 떨어짐
+> sorted(nums, reverse=True, key=len)
+> ```
+
+### 3. 주요 매개변수 활용 예시
+
+#### 1) reverse (내림차순 정렬)
 
 기본값은 `False`(오름차순)이며, `True`로 설정하면 내림차순으로 정렬합니다.
 
 ```python
+nums = [3, 1, 4, 2]
 sorted_nums = sorted(nums, reverse=True) # [4, 3, 2, 1]
 ```
 
-#### key (커스텀 정렬 기준)
+#### 2) key (커스텀 정렬 기준)
 
-함수를 인자로 전달하여 정렬 기준을 정합니다. 주로 **람다(lambda)** 식과 함께 사용됩니다.
+단순한 오름차순이 아니라, 특정 규칙에 따라 정렬하고 싶을 때 사용합니다.
 
-- **문자열 길이 기준 정렬:** `key=len`
-- **대소문자 구분 없이 정렬:** `key=str.lower`
-
----
+- **문자열 길이 기준 정렬 (`key=len`)**
+  ```python
+  words = ["apple", "bat", "cherry"]
+  sorted_words = sorted(words, key=len) # ["bat", "apple", "cherry"]
+  ```
+- **절댓값 기준 정렬 (`key=abs`)**
+  ```python
+  nums = [3, -1, -4, 2]
+  sorted_nums = sorted(nums, key=abs) # [-1, 2, 3, -4]
+  ```
+- **대소문자 구분 없이 정렬 (`key=str.lower`)**
+  ```python
+  chars = ['a', 'C', 'b', 'A']
+  sorted_chars = sorted(chars, key=str.lower) # ['a', 'A', 'b', 'C']
+  ```
 
 ## 3. 람다(Lambda)와 다중 조건 정렬
 
@@ -155,16 +183,12 @@ print(students)
 # Anna와 Jongyun은 점수가 같으므로 이름 순으로 정렬되었습니다.
 ```
 
----
-
 ## 4. Timsort 알고리즘
 
 파이썬의 정렬은 **Timsort**라는 알고리즘을 사용합니다. 이는 삽입 정렬(Insertion Sort)과 병합 정렬(Merge Sort)의 장점을 결합한 하이브리드 알고리즘입니다.
 
 - **시간 복잡도**: 최선의 경우 $O(n)$, 평균 및 최악의 경우 $O(n \log n)$입니다.
 - **안정성(Stable)**: 값이 같은 요소들의 상대적인 순서가 정렬 후에도 유지됩니다.
-
----
 
 ## 5. 실전 팁: 딕셔너 정렬 심화
 
@@ -180,8 +204,6 @@ scores = {"Jongyun": 90, "Anna": 95, "Piotr": 85}
 sorted_scores = sorted(scores.items(), key=lambda x: x[1])
 # 결과: [('Piotr', 85), ('Jongyun', 90), ('Anna', 95)]
 ```
-
----
 
 ## Zip 함수 (여러 데이터 묶기)
 
@@ -266,8 +288,6 @@ print(combined)
 # 결과: [('Wiktoria', 100), ('Jongyun', 90), ('Anna', 80)]
 ```
 
----
-
 ## 애스터리스크(`*`) 활용
 
 파이썬에서 **애스터리스크(`*`)** 연산자는 단순히 곱셈을 넘어, 데이터를 묶거나 푸는 등 아주 다양한 역할을 수행합니다. 크게 네 가지 주요 용도로 나눌 수 있습니다.
@@ -348,8 +368,6 @@ print_info(name="Jongyun", country="Poland", job="Dev")
 
 > **실전 팁:** 알고리즘 문제를 풀 때 리스트 안의 요소를 공백 단위로 출력해야 하는 경우, `for`문을 돌리는 대신 `print(*list)` 한 줄로 처리하는 기교를 자주 사용하게 됩니다.
 
----
-
 ## 슬라이싱 (Slicing)
 
 파이썬의 **슬라이싱(Slicing)**은 리스트, 문자열, 튜플 등 순서가 있는 자료형의 일부분을 잘라내어 새로운 객체를 만드는 아주 강력한 기능입니다.
@@ -423,8 +441,6 @@ print(word[:4])    # Dzię
 
 - **IndexError 방지**: `nums[100]`처럼 단일 인덱스 접근은 범위를 벗어나면 에러가 나지만, `nums[0:100]` 슬라이싱은 범위가 넘어가도 있는 데까지만 가져오고 에러를 내지 않습니다.
 - **불변성**: 슬라이싱은 원본을 수정하는 것이 아니라 항상 **새로운 객체**를 반환합니다.
-
----
 
 ## 제너레이터 (Generator)
 
@@ -503,8 +519,6 @@ for line in read_large_file("big_log.txt"):
         print(line)
 ```
 
----
-
 ## enumerate() 함수
 
 **`enumerate()`** 함수는 리스트, 튜플, 문자열 같은 반복 가능한(iterable) 객체를 입력으로 받아, **인덱스(Index)와 요소(Value)를 동시에** 반환해주는 아주 유용한 내장 함수입니다.
@@ -565,8 +579,6 @@ data = [10, 60, 20, 70, 30]
 high_indices = [i for i, v in enumerate(data) if v >= 50]
 # [1, 3]
 ```
-
----
 
 ## 유용한 내장 함수 및 메서드 モ음
 
