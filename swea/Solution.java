@@ -2,58 +2,51 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 public class Solution {
-    // SWEA: 26837
+
     private static StringBuilder stringBuilder = new StringBuilder();
 
-    private static void execute(String target) {
-        int n = target.length();
-        int result = 0;
+    private static void executeOne(int n, int[] arr) {
+        int countRoom = 0;
 
-        for (int openingIdx = 0; openingIdx < n; openingIdx++) {
-            int aCount = 0;
-            int cCount = 0;
+        for (int idx = 0; idx < n; idx++) {
+            int left1 = (idx - 2 >= 0) ? arr[idx - 2] : 0;
+            int left2 = (idx - 1 >= 0) ? arr[idx - 1] : 0;
+            int right1 = (idx + 1 < n) ? arr[idx + 1] : 0;
+            int right2 = (idx + 2 < n) ? arr[idx + 2] : 0;
+            int maxSurround = Math.max(Math.max(left1, left2), Math.max(right1, right2));
 
-            for (int closingIdx = openingIdx + 1; closingIdx < n; closingIdx += 2) {
-                for (int idx = closingIdx - 1; idx <= closingIdx; idx++) {
-                    if (target.charAt(idx) == 'A') aCount += 1;
-                    if (target.charAt(idx) == 'T') aCount -= 1;
-                    if (target.charAt(idx) == 'C') cCount += 1;
-                    if (target.charAt(idx) == 'G') cCount -= 1;
-                }
-
-                if (aCount == 0 && cCount == 0) result += 1;
-            }
+            countRoom += (arr[idx] > maxSurround) ? (arr[idx] - maxSurround) : 0;
         }
 
-        stringBuilder.append(result).append("\n");
+        stringBuilder.append(countRoom).append("\n");
         return;
     }
 
     public static void main(String[] args) throws IOException {
-        /*
-        * start index
-        * length: 2, 4, 6, ...
-        * */
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String line = br.readLine();
+        String line;
+        StringTokenizer tokenizer;
 
-        StringTokenizer tokenizer = new StringTokenizer(line);
-        int nCases = Integer.parseInt(tokenizer.nextToken());
-
-        String[] cases = new String[nCases];
-        for (int idx = 0; idx < nCases; idx++) {
-            line = br.readLine();
+        for (int tcIdx = 0; tcIdx < 10; tcIdx++) {
+            stringBuilder.append("#" + (tcIdx + 1) + " ");
+            line = reader.readLine();
             tokenizer = new StringTokenizer(line);
 
-            int _n = Integer.parseInt(tokenizer.nextToken());
-            cases[idx] = tokenizer.nextToken();
+            int n = Integer.parseInt(tokenizer.nextToken());
+            int[] arr = new int[n];
 
-            execute(cases[idx]);
+            line = reader.readLine();
+            tokenizer = new StringTokenizer(line);
+            for (int idx = 0; idx < n; idx++) {
+                arr[idx] = Integer.parseInt(tokenizer.nextToken());
+            }
+
+            executeOne(n, arr);
         }
 
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        bw.write(stringBuilder.toString());
-        bw.flush();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        writer.write(stringBuilder.toString());
+        writer.flush();
     }
 }
