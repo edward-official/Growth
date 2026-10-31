@@ -2,51 +2,118 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 public class Solution {
+    // SWEA 1244 (INCORRECT): greedy cannot reflect the future cost
 
     private static StringBuilder stringBuilder = new StringBuilder();
 
-    private static void executeOne(int n, int[] arr) {
-        int countRoom = 0;
+    private static int countDigits(int prize) {
+        int cnt = 1;
 
-        for (int idx = 0; idx < n; idx++) {
-            int left1 = (idx - 2 >= 0) ? arr[idx - 2] : 0;
-            int left2 = (idx - 1 >= 0) ? arr[idx - 1] : 0;
-            int right1 = (idx + 1 < n) ? arr[idx + 1] : 0;
-            int right2 = (idx + 2 < n) ? arr[idx + 2] : 0;
-            int maxSurround = Math.max(Math.max(left1, left2), Math.max(right1, right2));
-
-            countRoom += (arr[idx] > maxSurround) ? (arr[idx] - maxSurround) : 0;
+        while (prize >= 10) {
+            cnt += 1;
+            prize /= 10;
         }
 
-        stringBuilder.append(countRoom).append("\n");
-        return;
+        return cnt;
+    }
+
+    private static int[] convertToArray(int prize) {
+        int nDigits = countDigits(prize);
+        int[] pArray = new int[nDigits];
+
+        int idx = nDigits - 1;
+        while (idx >= 0) {
+            pArray[idx--] = prize % 10;
+            prize /= 10;
+        }
+
+        return pArray;
+    }
+
+    private static void switchTwo(int[] pArray, int idxL, int idxR) {
+        int tmp = pArray[idxL];
+        pArray[idxL] = pArray[idxR];
+        pArray[idxR] = tmp;
+    }
+
+    private static void switchTwo(int[] pArray) {
+        int n = pArray.length;
+
+        if (isDescending(pArray)) {
+            switchTwo(pArray, n - 2, n - 1);
+            return;
+        }
+
+        for (int idxL = 0; idxL < n; idxL++) {
+
+            int winnerIdx = -1;
+            for (int idxR = idxL + 1; idxR < n; idxR++) {
+                if (pArray[idxL] < pArray[idxR]) {
+                    if (winnerIdx == -1) winnerIdx = idxR;
+                    else if (pArray[winnerIdx] <= pArray[idxR]) winnerIdx = idxR;
+                }
+            }
+
+            if (winnerIdx != -1) {
+                switchTwo(pArray, idxL, winnerIdx);
+                return;
+            }
+        }
+    }
+
+    private static boolean isDescending(int[] pArray) {
+        int n = pArray.length;
+
+        for (int idx = 1; idx < n; idx++) {
+            if (pArray[idx - 1] < pArray[idx]) return false;
+        }
+
+        return true;
+    }
+
+    private static void executeOne(int prize, int nChange) {
+        int[] pArray = convertToArray(prize);
+        int pSize = pArray.length;
+
+        while (nChange > 0 && !isDescending(pArray)) {
+            switchTwo(pArray);
+            nChange -= 1;
+        }
+
+        if (isDescending(pArray) && nChange % 2 == 1) {
+            boolean twinExists = false;
+            for (int idx = 0; idx < pSize - 1; idx++) {
+                if (pArray[idx] == pArray[idx + 1]) {
+                    twinExists = true;
+                    break;
+                }
+            }
+
+            if (!twinExists) switchTwo(pArray, pSize - 2, pSize - 1);
+        }
+
+        for (int idx = 0; idx < pSize; idx++) stringBuilder.append(pArray[idx]);
+        stringBuilder.append("\n");
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
 
-        String line;
-        StringTokenizer tokenizer;
+        int nCases = Integer.parseInt(tokenizer.nextToken());
+        for (int idx = 0; idx < nCases; idx++) {
+            tokenizer = new StringTokenizer(reader.readLine());
 
-        for (int tcIdx = 0; tcIdx < 10; tcIdx++) {
-            stringBuilder.append("#" + (tcIdx + 1) + " ");
-            line = reader.readLine();
-            tokenizer = new StringTokenizer(line);
+            int prize = Integer.parseInt(tokenizer.nextToken());
+            int nChange = Integer.parseInt(tokenizer.nextToken());
 
-            int n = Integer.parseInt(tokenizer.nextToken());
-            int[] arr = new int[n];
-
-            line = reader.readLine();
-            tokenizer = new StringTokenizer(line);
-            for (int idx = 0; idx < n; idx++) {
-                arr[idx] = Integer.parseInt(tokenizer.nextToken());
-            }
-
-            executeOne(n, arr);
+            stringBuilder.append("#" + (idx + 1) + " ");
+            executeOne(prize, nChange);
         }
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
         writer.write(stringBuilder.toString());
         writer.flush();
     }
+
 }
