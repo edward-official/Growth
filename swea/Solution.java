@@ -3,53 +3,45 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
-    private static int maxPrize = 0;
-    private static boolean[][] visited;
+    private static StringBuilder stringBuilder = new StringBuilder();
+    private static int maxTaste = 0;
 
-    private static void switchTwo(char[] prize, int idxL, int idxR) {
-        char tmp = prize[idxL];
-        prize[idxL] = prize[idxR];
-        prize[idxR] = tmp;
-    }
+    private static void handleOne(int[] tArray, int[] cArray, int cLimit, int tNow, int cNow, int idx) {
+        if (cNow > cLimit) return;
 
-    private static void handleOne(char[] prize, int nSwitch, int count) {
-        int pValue = Integer.parseInt(new String(prize));
-
-        if (count == nSwitch) {
-            maxPrize = Math.max(maxPrize, pValue);
+        if (cNow == cLimit || idx == tArray.length) {
+            maxTaste = Math.max(tNow, maxTaste);
             return;
         }
 
-        if (visited[count][pValue]) return;
-
-        visited[count][pValue] = true;
-        for (int idxL = 0; idxL < prize.length; idxL++) {
-            for (int idxR = idxL + 1; idxR < prize.length; idxR++) {
-                switchTwo(prize, idxL, idxR);
-                handleOne(prize, nSwitch, count + 1);
-                switchTwo(prize, idxL, idxR);
-            }
-        }
+        handleOne(tArray, cArray, cLimit, tNow, cNow, idx + 1);
+        handleOne(tArray, cArray, cLimit, tNow + tArray[idx], cNow + cArray[idx], idx + 1);
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-        int nGiven = Integer.parseInt(tokenizer.nextToken());
-        for (int idx = 0; idx < nGiven; idx++) {
+        int nInput = Integer.parseInt(tokenizer.nextToken());
+        for (int idx = 0; idx < nInput; idx++) {
             tokenizer = new StringTokenizer(reader.readLine());
 
-            String prize = tokenizer.nextToken();
-            int nSwitch = Integer.parseInt(tokenizer.nextToken());
+            int nIngredient = Integer.parseInt(tokenizer.nextToken());
+            int cLimit = Integer.parseInt(tokenizer.nextToken());
 
-            maxPrize = 0;
-            visited = new boolean[nSwitch][Integer.parseInt(prize) * 10];
-            handleOne(prize.toCharArray(), nSwitch, 0);
+            int[] tasteArray = new int[nIngredient];
+            int[] cArray = new int[nIngredient];
 
-            stringBuilder.append("#" + (idx + 1) + " " + maxPrize).append("\n");
+            for (int i = 0; i < nIngredient; i++) {
+                tokenizer = new StringTokenizer(reader.readLine());
+
+                tasteArray[i] = Integer.parseInt(tokenizer.nextToken());
+                cArray[i] = Integer.parseInt(tokenizer.nextToken());
+            }
+
+            maxTaste = 0;
+            handleOne(tasteArray, cArray, cLimit, 0, 0, 0);
+            stringBuilder.append("#" + (idx + 1) + " " + maxTaste).append("\n");
         }
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
