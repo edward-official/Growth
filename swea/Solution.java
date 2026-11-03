@@ -1,47 +1,74 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Solution {
 
     private static StringBuilder stringBuilder = new StringBuilder();
-    private static int maxTaste = 0;
+    private static int minGap = Integer.MAX_VALUE;
 
-    private static void handleOne(int[] tArray, int[] cArray, int cLimit, int tNow, int cNow, int idx) {
-        if (cNow > cLimit) return;
+    private static int getGap(List<Integer> boxHeight) {
+        int maxH = boxHeight.get(0);
+        int minH = boxHeight.get(0);
 
-        if (cNow == cLimit || idx == tArray.length) {
-            maxTaste = Math.max(tNow, maxTaste);
-            return;
+        for (int idx = 1; idx < boxHeight.size(); idx++) {
+            int item = boxHeight.get(idx);
+
+            maxH = Math.max(item, maxH);
+            minH = Math.min(item, minH);
         }
 
-        handleOne(tArray, cArray, cLimit, tNow, cNow, idx + 1);
-        handleOne(tArray, cArray, cLimit, tNow + tArray[idx], cNow + cArray[idx], idx + 1);
+        return maxH - minH;
+    }
+
+    private static void flattenOnce(List<Integer> boxHeight) {
+        int idxMax = 0;
+        int idxMin = 0;
+
+        int n = boxHeight.size();
+        for (int idx = 0; idx < n; idx++) {
+            if (boxHeight.get(idx) > boxHeight.get(idxMax)) idxMax = idx;
+            if (boxHeight.get(idx) < boxHeight.get(idxMin)) idxMin = idx;
+        }
+
+        boxHeight.set(idxMax, boxHeight.get(idxMax) - 1);
+        boxHeight.set(idxMin, boxHeight.get(idxMin) + 1);
+    }
+
+    private static void handleOne(int nDump, List<Integer> boxHeight) {
+        minGap = Integer.MAX_VALUE;
+
+        for (int i = 0; i < nDump; i++) {
+            if (getGap(boxHeight) == 0) {
+                minGap = Math.min(getGap(boxHeight), minGap);
+                return;
+            }
+
+            flattenOnce(boxHeight);
+        }
+
+        minGap = Math.min(getGap(boxHeight), minGap);
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
+        StringTokenizer tokenizer;
 
-        int nInput = Integer.parseInt(tokenizer.nextToken());
-        for (int idx = 0; idx < nInput; idx++) {
+        int nGiven = 10;
+
+        for (int i = 0; i < nGiven; i++) {
             tokenizer = new StringTokenizer(reader.readLine());
+            int nDump = Integer.parseInt(tokenizer.nextToken());
 
-            int nIngredient = Integer.parseInt(tokenizer.nextToken());
-            int cLimit = Integer.parseInt(tokenizer.nextToken());
-
-            int[] tasteArray = new int[nIngredient];
-            int[] cArray = new int[nIngredient];
-
-            for (int i = 0; i < nIngredient; i++) {
-                tokenizer = new StringTokenizer(reader.readLine());
-
-                tasteArray[i] = Integer.parseInt(tokenizer.nextToken());
-                cArray[i] = Integer.parseInt(tokenizer.nextToken());
+            tokenizer = new StringTokenizer(reader.readLine());
+            List<Integer> boxHeight = new ArrayList<>();
+            while (tokenizer.hasMoreTokens()) {
+                boxHeight.add(Integer.parseInt(tokenizer.nextToken()));
             }
 
-            maxTaste = 0;
-            handleOne(tasteArray, cArray, cLimit, 0, 0, 0);
-            stringBuilder.append("#" + (idx + 1) + " " + maxTaste).append("\n");
+            handleOne(nDump, boxHeight);
+            stringBuilder.append("#" + (i + 1) + " " + minGap).append("\n");
         }
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
