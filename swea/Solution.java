@@ -1,74 +1,73 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Solution {
 
     private static StringBuilder stringBuilder = new StringBuilder();
-    private static int minGap = Integer.MAX_VALUE;
 
-    private static int getGap(List<Integer> boxHeight) {
-        int maxH = boxHeight.get(0);
-        int minH = boxHeight.get(0);
+    private static boolean[] rowCheck;
+    private static boolean[] columnCheck;
+    private static boolean[] ascDiagCheck;
+    private static boolean[] descDiagCheck;
 
-        for (int idx = 1; idx < boxHeight.size(); idx++) {
-            int item = boxHeight.get(idx);
+    private static int answerCnt;
 
-            maxH = Math.max(item, maxH);
-            minH = Math.min(item, minH);
-        }
-
-        return maxH - minH;
+    private static void setArray(int boardWidth) {
+        rowCheck = new boolean[boardWidth];
+        columnCheck = new boolean[boardWidth];
+        ascDiagCheck = new boolean[boardWidth * 2 - 1];
+        descDiagCheck = new boolean[boardWidth * 2 - 1];
     }
 
-    private static void flattenOnce(List<Integer> boxHeight) {
-        int idxMax = 0;
-        int idxMin = 0;
+    private static boolean isFree(int rIdx, int cIdx, int width) {
+        if (rowCheck[rIdx]) return false;
+        if (columnCheck[cIdx]) return false;
+        if (ascDiagCheck[rIdx + cIdx]) return false;
+        if (descDiagCheck[rIdx - cIdx + width - 1]) return false;
 
-        int n = boxHeight.size();
-        for (int idx = 0; idx < n; idx++) {
-            if (boxHeight.get(idx) > boxHeight.get(idxMax)) idxMax = idx;
-            if (boxHeight.get(idx) < boxHeight.get(idxMin)) idxMin = idx;
-        }
-
-        boxHeight.set(idxMax, boxHeight.get(idxMax) - 1);
-        boxHeight.set(idxMin, boxHeight.get(idxMin) + 1);
+        return true;
     }
 
-    private static void handleOne(int nDump, List<Integer> boxHeight) {
-        minGap = Integer.MAX_VALUE;
+    private static void setBoardCell(int rIdx, int cIdx, int width, boolean setValue) {
+        rowCheck[rIdx] = setValue;
+        columnCheck[cIdx] = setValue;
+        ascDiagCheck[rIdx + cIdx] = setValue;
+        descDiagCheck[rIdx - cIdx + width - 1] = setValue;
+    }
 
-        for (int i = 0; i < nDump; i++) {
-            if (getGap(boxHeight) == 0) {
-                minGap = Math.min(getGap(boxHeight), minGap);
-                return;
+    private static void handleOne(int rIdx, int boardWidth) {
+        if (rIdx == boardWidth) {
+            answerCnt += 1;
+            return;
+        }
+
+        for (int cIdx = 0; cIdx < boardWidth; cIdx++) {
+            if (isFree(rIdx, cIdx, boardWidth)) {
+                setBoardCell(rIdx, cIdx, boardWidth, true);
+                handleOne(rIdx + 1, boardWidth);
+                setBoardCell(rIdx, cIdx, boardWidth, false);
             }
-
-            flattenOnce(boxHeight);
         }
-
-        minGap = Math.min(getGap(boxHeight), minGap);
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokenizer;
+        StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
 
-        int nGiven = 10;
+        int nGiven = Integer.parseInt(tokenizer.nextToken());
+        String line;
+        int idx = 1;
+        while ((line = reader.readLine()) != null) {
+            tokenizer = new StringTokenizer(line);
+            int boardWidth = Integer.parseInt(tokenizer.nextToken());
 
-        for (int i = 0; i < nGiven; i++) {
-            tokenizer = new StringTokenizer(reader.readLine());
-            int nDump = Integer.parseInt(tokenizer.nextToken());
+            setArray(boardWidth);
+            answerCnt = 0;
 
-            tokenizer = new StringTokenizer(reader.readLine());
-            List<Integer> boxHeight = new ArrayList<>();
-            while (tokenizer.hasMoreTokens()) {
-                boxHeight.add(Integer.parseInt(tokenizer.nextToken()));
-            }
+            handleOne(0, boardWidth);
 
-            handleOne(nDump, boxHeight);
-            stringBuilder.append("#" + (i + 1) + " " + minGap).append("\n");
+            stringBuilder.append("#" + idx + " " + answerCnt).append("\n");
+            idx += 1;
         }
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
