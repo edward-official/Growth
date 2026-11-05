@@ -5,69 +5,47 @@ public class Solution {
 
     private static StringBuilder stringBuilder = new StringBuilder();
 
-    private static boolean[] rowCheck;
-    private static boolean[] columnCheck;
-    private static boolean[] ascDiagCheck;
-    private static boolean[] descDiagCheck;
+    private static void handleOne(int[][] farm, int width) {
+        int center = width / 2;
 
-    private static int answerCnt;
-
-    private static void setArray(int boardWidth) {
-        rowCheck = new boolean[boardWidth];
-        columnCheck = new boolean[boardWidth];
-        ascDiagCheck = new boolean[boardWidth * 2 - 1];
-        descDiagCheck = new boolean[boardWidth * 2 - 1];
-    }
-
-    private static boolean isFree(int rIdx, int cIdx, int width) {
-        if (rowCheck[rIdx]) return false;
-        if (columnCheck[cIdx]) return false;
-        if (ascDiagCheck[rIdx + cIdx]) return false;
-        if (descDiagCheck[rIdx - cIdx + width - 1]) return false;
-
-        return true;
-    }
-
-    private static void setBoardCell(int rIdx, int cIdx, int width, boolean setValue) {
-        rowCheck[rIdx] = setValue;
-        columnCheck[cIdx] = setValue;
-        ascDiagCheck[rIdx + cIdx] = setValue;
-        descDiagCheck[rIdx - cIdx + width - 1] = setValue;
-    }
-
-    private static void handleOne(int rIdx, int boardWidth) {
-        if (rIdx == boardWidth) {
-            answerCnt += 1;
-            return;
-        }
-
-        for (int cIdx = 0; cIdx < boardWidth; cIdx++) {
-            if (isFree(rIdx, cIdx, boardWidth)) {
-                setBoardCell(rIdx, cIdx, boardWidth, true);
-                handleOne(rIdx + 1, boardWidth);
-                setBoardCell(rIdx, cIdx, boardWidth, false);
+        int harvest = 0;
+        for (int rIdx = 0; rIdx <= center; rIdx++) {
+            for (int cIdx = center - rIdx; cIdx <= center + rIdx; cIdx++) {
+                harvest += farm[rIdx][cIdx];
             }
         }
+
+        for (int rIdx = center + 1; rIdx < width; rIdx++) {
+            for (int cIdx = rIdx - center; cIdx <= 3 * center - rIdx; cIdx++) {
+                harvest += farm[rIdx][cIdx];
+            }
+        }
+
+        stringBuilder.append(harvest).append("\n");
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
 
-        int nGiven = Integer.parseInt(tokenizer.nextToken());
-        String line;
-        int idx = 1;
-        while ((line = reader.readLine()) != null) {
-            tokenizer = new StringTokenizer(line);
-            int boardWidth = Integer.parseInt(tokenizer.nextToken());
+        int nTestcases = Integer.parseInt(tokenizer.nextToken());
 
-            setArray(boardWidth);
-            answerCnt = 0;
+        for (int idx = 0; idx < nTestcases; idx++) {
+            tokenizer = new StringTokenizer(reader.readLine());
+            int width = Integer.parseInt(tokenizer.nextToken());
 
-            handleOne(0, boardWidth);
+            int[][] farm = new int[width][width];
+            for (int rIdx = 0; rIdx < width; rIdx++) {
+                tokenizer = new StringTokenizer(reader.readLine());
+                String digits = tokenizer.nextToken();
 
-            stringBuilder.append("#" + idx + " " + answerCnt).append("\n");
-            idx += 1;
+                for (int cIdx = 0; cIdx < width; cIdx++) {
+                    farm[rIdx][cIdx] = digits.charAt(cIdx) - '0';
+                }
+            }
+
+            stringBuilder.append("#" + (idx + 1) + " ");
+            handleOne(farm, width);
         }
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
