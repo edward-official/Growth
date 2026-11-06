@@ -4,48 +4,52 @@ import java.util.StringTokenizer;
 public class Solution {
 
     private static StringBuilder stringBuilder = new StringBuilder();
+    private static int countAttached = 0;
 
-    private static void handleOne(int[][] farm, int width) {
-        int center = width / 2;
+    private static void handleOne(int[][] board, int width) {
+        countAttached = 0;
 
-        int harvest = 0;
-        for (int rIdx = 0; rIdx <= center; rIdx++) {
-            for (int cIdx = center - rIdx; cIdx <= center + rIdx; cIdx++) {
-                harvest += farm[rIdx][cIdx];
+        for (int cIdx = 0; cIdx < width; cIdx++) {
+            for (int rIdx = 0; rIdx < width; rIdx++) {
+                if (board[rIdx][cIdx] == 1) break;
+                if (board[rIdx][cIdx] == 2) board[rIdx][cIdx] = 0;
+            }
+            for (int rIdx = width - 1; rIdx >= 0; rIdx--) {
+                if (board[rIdx][cIdx] == 2) break;
+                if (board[rIdx][cIdx] == 1) board[rIdx][cIdx] = 0;
+            }
+
+            boolean isOpen = false;
+            for (int rIdx = 0; rIdx < width; rIdx++) {
+                if (!isOpen && board[rIdx][cIdx] == 1) isOpen = true;
+                else if (isOpen && board[rIdx][cIdx] == 2) {
+                    isOpen = false;
+                    countAttached += 1;
+                }
             }
         }
-
-        for (int rIdx = center + 1; rIdx < width; rIdx++) {
-            for (int cIdx = rIdx - center; cIdx <= 3 * center - rIdx; cIdx++) {
-                harvest += farm[rIdx][cIdx];
-            }
-        }
-
-        stringBuilder.append(harvest).append("\n");
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
+        StringTokenizer tokenizer;
 
-        int nTestcases = Integer.parseInt(tokenizer.nextToken());
-
-        for (int idx = 0; idx < nTestcases; idx++) {
+        int nGiven = 10;
+        for (int i = 0; i < nGiven; i++) {
             tokenizer = new StringTokenizer(reader.readLine());
             int width = Integer.parseInt(tokenizer.nextToken());
 
-            int[][] farm = new int[width][width];
-            for (int rIdx = 0; rIdx < width; rIdx++) {
+            int[][] board = new int[width][width];
+            for (int r = 0; r < width; r++) {
                 tokenizer = new StringTokenizer(reader.readLine());
-                String digits = tokenizer.nextToken();
 
-                for (int cIdx = 0; cIdx < width; cIdx++) {
-                    farm[rIdx][cIdx] = digits.charAt(cIdx) - '0';
+                for (int c = 0; c < width; c++) {
+                    board[r][c] = Integer.parseInt(tokenizer.nextToken());
                 }
             }
 
-            stringBuilder.append("#" + (idx + 1) + " ");
-            handleOne(farm, width);
+            handleOne(board, width);
+            stringBuilder.append("#" + (i + 1) + " " + countAttached).append("\n");
         }
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
