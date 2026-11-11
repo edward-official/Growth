@@ -1,99 +1,54 @@
 import java.io.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Solution {
 
+    private static final int CODE_LENGTH = 8;
+    private static final int N_TC = 10;
+    private static final int ROTATION_LENGTH = 5;
+
     private static StringBuilder stringBuilder = new StringBuilder();
 
-    private static final int N_TC = 10;
-    private static final int WIDTH = 100;
+    private static void decode(Deque<Integer> code) {
+        int subtracter = 1;
 
-    private static int tcAnswer = 1;
+        while (true) {
+            int fixedItem = code.poll() - subtracter;
+            subtracter = subtracter % ROTATION_LENGTH + 1;
+            code.offer(Math.max(fixedItem, 0));
 
-    private static boolean rCheckPoint(String[] board, int rIdx, int cIdx, int length) {
-        for (int offset = 0; offset < length / 2; offset++) {
-            char letterL = board[rIdx + offset].charAt(cIdx);
-            char letterR = board[rIdx + length - 1 - offset].charAt(cIdx);
-
-            if (letterL != letterR) return false;
+            if (fixedItem <= 0) break;
         }
-        return true;
     }
 
-    private static boolean rHasLenght(String[] board, int length) {
-        for (int cIdx = 0; cIdx < WIDTH; cIdx++) {
-            for (int rIdx = 0; rIdx < WIDTH; rIdx++) {
+    private static String oneTc(Deque<Integer> code) {
+        StringBuilder answer = new StringBuilder();
 
-                if (rIdx + length > WIDTH) break;
-                if (rCheckPoint(board, rIdx, cIdx, length)) return true;
-            }
-        }
-        return false;
-    }
-
-    private static int rDir(String[] board, int minLength) {
-        int rv = minLength;
-
-        for (int length = minLength + 1; length <= WIDTH; length++) {
-            if (rHasLenght(board, length)) rv = length;
+        decode(code);
+        while (!code.isEmpty()) {
+            answer.append(" " + code.poll());
         }
 
-        return rv;
-    }
-
-    private static boolean cCheckPoint(String[] board, int rIdx, int cIdx, int length) {
-        for (int offset = 0; offset < length / 2; offset++) {
-            char letterL = board[rIdx].charAt(cIdx + offset);
-            char letterR = board[rIdx].charAt(cIdx + length - 1 - offset);
-
-            if (letterL != letterR) return false;
-        }
-        return true;
-    }
-
-    private static boolean cHasLenght(String[] board, int length) {
-        for (int rIdx = 0; rIdx < WIDTH; rIdx++) {
-            for (int cIdx = 0; cIdx < WIDTH; cIdx++) {
-
-                if (cIdx + length > WIDTH) break;
-                if (cCheckPoint(board, rIdx, cIdx, length)) return true;
-            }
-        }
-        return false;
-    }
-
-    private static int cDir(String[] board, int minLength) {
-        int rv = minLength;
-
-        for (int length = minLength + 1; length <= WIDTH; length++) {
-            if (cHasLenght(board, length)) rv = length;
-        }
-
-        return rv;
-    }
-
-    private static void oneTc(String[] board) {
-        tcAnswer = 1;
-        tcAnswer = Math.max(rDir(board, tcAnswer), tcAnswer);
-        tcAnswer = Math.max(cDir(board, tcAnswer), tcAnswer);
+        return answer.toString();
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int tc = 1; tc <= N_TC; tc++) {
+        for (int i = 0; i < N_TC; i++) {
             StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
-            int tcGiven = Integer.parseInt(tokenizer.nextToken());
+            int tc = Integer.parseInt(tokenizer.nextToken());
 
-            String[] board = new String[WIDTH];
-            for (int idx = 0; idx < WIDTH; idx++) {
-                board[idx] = reader.readLine();
+            tokenizer = new StringTokenizer(reader.readLine());
+            Deque<Integer> code = new ArrayDeque<>();
+            for (int idx = 0; idx < CODE_LENGTH; idx++) {
+                code.add(Integer.parseInt(tokenizer.nextToken()));
             }
 
-            oneTc(board);
-
-            stringBuilder.append("#" + tcGiven + " " + tcAnswer).append("\n");
+            stringBuilder.append("#" + tc + oneTc(code)).append("\n");
         }
 
         writer.write(stringBuilder.toString());
