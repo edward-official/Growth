@@ -1,37 +1,30 @@
 import java.io.*;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Solution {
 
-    private static final int CODE_LENGTH = 8;
-    private static final int N_TC = 10;
-    private static final int ROTATION_LENGTH = 5;
-
     private static StringBuilder stringBuilder = new StringBuilder();
 
-    private static void decode(Deque<Integer> code) {
-        int subtracter = 1;
+    private static final int N_TC = 10;
 
-        while (true) {
-            int fixedItem = code.poll() - subtracter;
-            subtracter = subtracter % ROTATION_LENGTH + 1;
-            code.offer(Math.max(fixedItem, 0));
+    private static boolean isPointValid(String piece, String line, int openingIdx) {
+        if (openingIdx + piece.length() > line.length()) return false;
 
-            if (fixedItem <= 0) break;
+        for (int idx = 0; idx < piece.length(); idx++) {
+            if (line.charAt(openingIdx + idx) != piece.charAt(idx)) return false;
         }
+
+        return true;
     }
 
-    private static String oneTc(Deque<Integer> code) {
-        StringBuilder answer = new StringBuilder();
+    private static int handleOneTc(String piece, String line) {
+        int cnt = 0;
 
-        decode(code);
-        while (!code.isEmpty()) {
-            answer.append(" " + code.poll());
+        for (int idx = 0; idx < line.length(); idx++) {
+            if (isPointValid(piece, line, idx)) cnt += 1;
         }
 
-        return answer.toString();
+        return cnt;
     }
 
     public static void main(String[] args) throws IOException {
@@ -40,15 +33,12 @@ public class Solution {
 
         for (int i = 0; i < N_TC; i++) {
             StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
-            int tc = Integer.parseInt(tokenizer.nextToken());
+            int tcIdx = Integer.parseInt(tokenizer.nextToken());
 
-            tokenizer = new StringTokenizer(reader.readLine());
-            Deque<Integer> code = new ArrayDeque<>();
-            for (int idx = 0; idx < CODE_LENGTH; idx++) {
-                code.add(Integer.parseInt(tokenizer.nextToken()));
-            }
+            String piece = reader.readLine().trim();
+            String line = reader.readLine().trim();
 
-            stringBuilder.append("#" + tc + oneTc(code)).append("\n");
+            stringBuilder.append("#" + tcIdx + " " + handleOneTc(piece, line)).append("\n");
         }
 
         writer.write(stringBuilder.toString());
