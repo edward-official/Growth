@@ -3,28 +3,37 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
-    private static StringBuilder stringBuilder = new StringBuilder();
-
     private static final int N_TC = 10;
 
-    private static boolean isPointValid(String piece, String line, int openingIdx) {
-        if (openingIdx + piece.length() > line.length()) return false;
+    private static StringBuilder stringBuilder = new StringBuilder();
 
-        for (int idx = 0; idx < piece.length(); idx++) {
-            if (line.charAt(openingIdx + idx) != piece.charAt(idx)) return false;
+    private static void erase(int n, char[] pw, int idxL, int idxR) {
+        while (0 <= idxL && idxL < n && 0 <= idxR && idxR < n) {
+            if (pw[idxL] != pw[idxR]) break;
+
+            pw[idxL] = '#';
+            pw[idxR] = '#';
+
+            while (0 <= idxL && pw[idxL] == '#') idxL--;
+            while (idxR < n && pw[idxR] == '#') idxR++;
         }
-
-        return true;
     }
 
-    private static int handleOneTc(String piece, String line) {
-        int cnt = 0;
+    private static int handleOneTc(int n, char[] pw) {
+        for (int idxR = 1; idxR < n; idxR++) {
+            int idxL = idxR - 1;
 
-        for (int idx = 0; idx < line.length(); idx++) {
-            if (isPointValid(piece, line, idx)) cnt += 1;
+            if (pw[idxL] == pw[idxR]) {
+                erase(n, pw, idxL, idxR);
+            }
         }
 
-        return cnt;
+        StringBuilder answerBuilder = new StringBuilder();
+        for (int idx = 0; idx < n; idx++) {
+            if (pw[idx] != '#') answerBuilder.append(pw[idx]);
+        }
+
+        return Integer.parseInt(answerBuilder.toString());
     }
 
     public static void main(String[] args) throws IOException {
@@ -33,12 +42,10 @@ public class Solution {
 
         for (int i = 0; i < N_TC; i++) {
             StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
-            int tcIdx = Integer.parseInt(tokenizer.nextToken());
+            int n = Integer.parseInt(tokenizer.nextToken());
+            char[] pw = tokenizer.nextToken().toCharArray();
 
-            String piece = reader.readLine().trim();
-            String line = reader.readLine().trim();
-
-            stringBuilder.append("#" + tcIdx + " " + handleOneTc(piece, line)).append("\n");
+            stringBuilder.append("#" + (i + 1) + " " + handleOneTc(n, pw)).append("\n");
         }
 
         writer.write(stringBuilder.toString());
