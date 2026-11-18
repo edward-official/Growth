@@ -1,66 +1,68 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Solution {
 
-    private static final int N_TC = 10;
-
     private static StringBuilder stringBuilder = new StringBuilder();
 
-    private static void computeInsert(List<Integer> code, int appendIdx, int[] items) {
-        for (int item: items) {
-            code.add(appendIdx++, item);
-        }
+    private static int getNumber(String item) {
+        if (item.equals("ZRO")) return 0;
+        if (item.equals("ONE")) return 1;
+        if (item.equals("TWO")) return 2;
+        if (item.equals("THR")) return 3;
+        if (item.equals("FOR")) return 4;
+        if (item.equals("FIV")) return 5;
+        if (item.equals("SIX")) return 6;
+        if (item.equals("SVN")) return 7;
+        if (item.equals("EGT")) return 8;
+        if (item.equals("NIN")) return 9;
+
+        return -1;
     }
 
-    private static void computeDelete(List<Integer> code, int deleteIdx, int nDelete) {
-        for (int i = 0; i < nDelete; i++) {
-            code.remove(deleteIdx);
+    private static String[] convertToArray(String line, int tcLength) {
+        String[] rv = new String[tcLength];
+
+        StringTokenizer tokenizer = new StringTokenizer(line);
+        for (int idx = 0; idx < tcLength; idx++) {
+            String item = tokenizer.nextToken();
+            rv[idx] = item;
         }
+
+        return rv;
     }
 
-    private static void computeAdd(List<Integer> code, int[] items) {
-        for (int item: items) {
-            code.add(item);
+    private static void mergesort(String[] arr, int openingIdx, int closingIdx) {
+        if (openingIdx == closingIdx) return;
+
+        int middleIdx = openingIdx + (closingIdx - openingIdx) / 2;
+
+        mergesort(arr, openingIdx, middleIdx);
+        mergesort(arr, middleIdx + 1, closingIdx);
+
+        String[] tmp = new String[closingIdx - openingIdx + 1];
+        int tmpIdx = 0;
+
+        int idxL = openingIdx;
+        int idxR = middleIdx + 1;
+
+        while (idxL <= middleIdx && idxR <= closingIdx) {
+            int numL = getNumber(arr[idxL]);
+            int numR = getNumber(arr[idxR]);
+
+            if (numL < numR) tmp[tmpIdx++] = arr[idxL++];
+            else tmp[tmpIdx++] = arr[idxR++];
         }
-    }
 
-    private static void computeOneTc(List<Integer> code, String instructions) {
-        StringTokenizer tokenizer = new StringTokenizer(instructions);
+        while (idxL <= middleIdx) tmp[tmpIdx++] = arr[idxL++];
+        while (idxR <= closingIdx) tmp[tmpIdx++] = arr[idxR++];
 
-        while (tokenizer.hasMoreTokens()) {
-            String insType = tokenizer.nextToken();
-
-            if (insType.equals("I")) {
-                int appendIdx = Integer.parseInt(tokenizer.nextToken());
-                int nAppend = Integer.parseInt(tokenizer.nextToken());
-
-                int[] items = new int[nAppend];
-                for (int idx = 0; idx < nAppend; idx++) {
-                    items[idx] = Integer.parseInt(tokenizer.nextToken());
-                }
-
-                computeInsert(code, appendIdx, items);
-            }
-            if (insType.equals("D")) {
-                int deleteIdx = Integer.parseInt(tokenizer.nextToken());
-                int nDelete = Integer.parseInt(tokenizer.nextToken());
-
-                computeDelete(code, deleteIdx, nDelete);
-            }
-            if (insType.equals("A")) {
-                int nAdd = Integer.parseInt(tokenizer.nextToken());
-
-                int[] items = new int[nAdd];
-                for (int idx = 0; idx < nAdd; idx++) {
-                    items[idx] = Integer.parseInt(tokenizer.nextToken());
-                }
-
-                computeAdd(code, items);
-            }
-
+        for (int offset = 0; offset < tmpIdx; offset++) {
+            arr[openingIdx + offset] = tmp[offset];
         }
     }
 
@@ -68,23 +70,22 @@ public class Solution {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        for (int tcIdx = 1; tcIdx <= N_TC; tcIdx++) {
-            int codeSize = Integer.parseInt(reader.readLine().trim());
-
-            List<Integer> code = new ArrayList<>();
+        int nTc = Integer.parseInt(reader.readLine().trim());
+        for (int i = 0; i < nTc; i++) {
             StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
-            for (int idx = 0; idx < codeSize; idx++) {
-                code.add(Integer.parseInt(tokenizer.nextToken()));
-            }
 
-            int nInstruction = Integer.parseInt(reader.readLine().trim());
-            String instructions = reader.readLine().trim();
+            int tcIdx = Integer.parseInt(tokenizer.nextToken().substring(1));
+            int tcLength = Integer.parseInt(tokenizer.nextToken());
 
-            computeOneTc(code, instructions);
+            String[] arr = convertToArray(reader.readLine(), tcLength);
 
-            stringBuilder.append("#" + tcIdx);
-            for (int idx = 0; idx < 10; idx++) {
-                stringBuilder.append(" " + code.get(idx));
+            stringBuilder.append("#" + tcIdx).append("\n");
+
+            // sort
+            mergesort(arr, 0, tcLength - 1);
+
+            for (String item: arr) {
+                stringBuilder.append(item + " ");
             }
             stringBuilder.append("\n");
         }
